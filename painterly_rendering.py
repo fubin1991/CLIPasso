@@ -69,6 +69,7 @@ def get_target(args):
 
 def main(args):
     loss_func = Loss(args)
+    # print("check point")
     inputs, mask = get_target(args)
     utils.log_input(args.use_wandb, 0, inputs, args.output_dir)
     renderer = load_renderer(args, inputs, mask)
@@ -97,15 +98,19 @@ def main(args):
         renderer.set_random_noise(epoch)
         if args.lr_scheduler:
             optimizer.update_lr(counter)
-
+        # print("check point")
         start = time.time()
         optimizer.zero_grad_()
         sketches = renderer.get_image().to(args.device)
+        # print("check point")
         losses_dict = loss_func(sketches, inputs.detach(
         ), renderer.get_color_parameters(), renderer, counter, optimizer)
         loss = sum(list(losses_dict.values()))
-        loss.backward()
+        # print("check point")
+        loss.backward() # this setp has problem: upload pytorch to 1.9.1
+        # print("check point")
         optimizer.step_()
+        # print("check point")
         if epoch % args.save_interval == 0:
             utils.plot_batch(inputs, sketches, f"{args.output_dir}/jpg_logs", counter,
                              use_wandb=args.use_wandb, title=f"iter{epoch}.jpg")
@@ -178,6 +183,7 @@ if __name__ == "__main__":
     args = config.parse_arguments()
     final_config = vars(args)
     try:
+        # print("check point")
         configs_to_save = main(args)
     except BaseException as err:
         print(f"Unexpected error occurred:\n {err}")

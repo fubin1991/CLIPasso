@@ -42,6 +42,8 @@ args = parser.parse_args()
 multiprocess = not args.colab and args.num_sketches > 1 and args.multiprocess
 
 abs_path = os.path.abspath(os.getcwd())
+# print("abs_path")
+# print(abs_path)
 
 target = f"{abs_path}/target_images/{args.target_file}"
 assert os.path.isfile(target), f"{target} does not exists!"
@@ -51,6 +53,7 @@ if not os.path.isfile(f"{abs_path}/U2Net_/saved_models/u2net.pth"):
            "-O", "U2Net_/saved_models/"])
 
 test_name = os.path.splitext(args.target_file)[0]
+# print(test_name)
 output_dir = f"{abs_path}/output_sketches/{test_name}/"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -73,6 +76,8 @@ if args.colab:
         print(f"GPU: {use_gpu}, {torch.cuda.current_device()}")
     print(f"Results will be saved to \n[{output_dir}] ...")
     print("=" * 50)
+
+# print("check point")
 
 seeds = list(range(0, args.num_sketches * 1000, 1000))
 
@@ -141,10 +146,12 @@ if multiprocess:
 
 for seed in seeds:
     wandb_name = f"{test_name}_{args.num_strokes}strokes_seed{seed}"
+    # print(wandb_name)
     if multiprocess:
         P.apply_async(run, (seed, wandb_name))
     else:
         run(seed, wandb_name)
+    # print("check point")
 
 if args.display:
     time.sleep(10)
