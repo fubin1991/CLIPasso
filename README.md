@@ -60,6 +60,46 @@ git submodule update --init --recursive
 python setup.py install
 ```
 
+### Installation via conda
+1.  Clone the repo:
+```bash
+git clone https://github.com/yael-vinker/CLIPasso.git
+cd CLIPasso
+```
+2. Create a new environment and install the libraries:
+Please use pip to install pytorch=1.9.1 version, some function may remove in higher version, while loss.backward has problem in lower version. 
+```bash
+conda create -n CLIPasso python=3.7
+conda activate CLIPasso
+pip install -r requirements.txt
+pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+pip install git+https://github.com/openai/CLIP.git
+```
+3. Install diffvg: Go to diffvg github, and follow the installation steps
+In /CLIPasso file, install diffvg via following steps
+```bash
+git clone https://github.com/BachiLi/diffvg
+cd diffvg
+git submodule update --init --recursive
+conda install -y numpy
+conda install -y scikit-image
+conda install -y -c anaconda cmake
+conda install -y -c conda-forge ffmpeg
+pip install svgwrite
+pip install svgpathtools
+pip install cssutils
+pip install numba
+pip install torch-tools
+pip install visdom
+python setup.py install
+```
+
+4. Install other package
+```bash
+conda install ipywidgets
+pip install protobuf==3.20.*
+```
+
 <br>
 
 ## Run Demo
